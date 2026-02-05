@@ -64,7 +64,7 @@ type Snowflake struct {
 	stepBits uint8
 }
 
-func NewSnowflake(epoch int64, node ...int64) *Snowflake {
+func NewSnowflake(epoch int64) *Snowflake {
 	var curTime = time.Now()
 	s := &Snowflake{
 		epoch:    curTime.Add(time.UnixMilli(epoch).Sub(curTime)),
@@ -74,7 +74,7 @@ func NewSnowflake(epoch int64, node ...int64) *Snowflake {
 	return s
 }
 
-func NewSnowflakeWithBits(epoch int64, nodeBits, stepBits uint8, node ...int64) *Snowflake {
+func NewSnowflakeWithBits(epoch int64, nodeBits, stepBits uint8) *Snowflake {
 	var curTime = time.Now()
 	s := &Snowflake{
 		epoch:    curTime.Add(time.UnixMilli(epoch).Sub(curTime)),
