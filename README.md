@@ -2,6 +2,9 @@ snowflake
 ====
 [![GoDoc](https://godoc.org/github.com/junsred/snowflake?status.svg)](https://godoc.org/github.com/junsred/snowflake) [![Go report](http://goreportcard.com/badge/junsred/snowflake)](http://goreportcard.com/report/junsred/snowflake) [![Build Status](https://travis-ci.org/junsred/snowflake.svg?branch=master)](https://travis-ci.org/junsred/snowflake) [![Discord Gophers](https://img.shields.io/badge/Discord%20Gophers-%23info-blue.svg)](https://discord.gg/0f1SbxBZjYq9jLBk)
 
+# Information
+This package was forked from [bwmarrin's snowflake](https://github.com/bwmarrin/snowflake) and modified to add some features such as id generation in specific time and fix race-conditions with global variables. The original package is no longer maintained, but it is still available for reference.
+
 snowflake is a [Go](https://golang.org/) package that provides
 * A very simple Twitter snowflake generator.
 * Methods to parse existing snowflake IDs.
