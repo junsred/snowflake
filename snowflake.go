@@ -139,7 +139,7 @@ func (n *Node) Generate() ID {
 }
 
 // Same with Generate but allows you to specify the current time.
-// - Make sure future nodes use different different node IDs or you may have collisions.
+// - Make sure future nodes use different node IDs or you may have collisions.
 func (n *Node) GenerateWithTime(t time.Time) ID {
 	return n.generate(t)
 }

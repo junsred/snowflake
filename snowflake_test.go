@@ -42,6 +42,65 @@ func TestGenerateDuplicateID(t *testing.T) {
 	}
 }
 
+func TestGenerateWithTime(t *testing.T) {
+	s := NewSnowflake(defaultEpoch)
+	node, err := s.NewNode(1)
+	if err != nil {
+		t.Fatalf("error creating NewNode, %s", err)
+	}
+
+	// Test with a specific time
+	testTime := node.epoch.Add(1000000)
+	id1 := node.GenerateWithTime(testTime)
+
+	if id1 == 0 {
+		t.Fatal("GenerateWithTime returned 0")
+	}
+
+	// Generate multiple IDs with the same time - should have different steps
+	id2 := node.GenerateWithTime(testTime)
+	if id1 == id2 {
+		t.Errorf("IDs generated with same time should be different: %d == %d", id1, id2)
+	}
+
+	// Verify the step increments correctly
+	step1 := id1.Step(node)
+	step2 := id2.Step(node)
+	if step2 != step1+1 {
+		t.Errorf("Expected step to increment: step1=%d, step2=%d", step1, step2)
+	}
+
+	// Test with a different time
+	testTime2 := node.epoch.Add(2000000)
+	id3 := node.GenerateWithTime(testTime2)
+
+	// Verify the time component is correct
+	extractedTime1 := id1.Time(node)
+	expectedTime1 := testTime.UnixMilli()
+	if extractedTime1 != expectedTime1 {
+		t.Errorf("Extracted time %d doesn't match expected time %d", extractedTime1, expectedTime1)
+	}
+
+	extractedTime3 := id3.Time(node)
+	expectedTime3 := testTime2.UnixMilli()
+	if extractedTime3 != expectedTime3 {
+		t.Errorf("Extracted time %d doesn't match expected time %d", extractedTime3, expectedTime3)
+	}
+
+	// Verify IDs with earlier time don't collide with later time IDs
+	if id1 == id3 || id2 == id3 {
+		t.Error("IDs generated with different times should be unique")
+	}
+
+	// Test node component remains consistent
+	if id1.Node(node) != node.node {
+		t.Errorf("Node component %d doesn't match expected node %d", id1.Node(node), node.node)
+	}
+	if id3.Node(node) != node.node {
+		t.Errorf("Node component %d doesn't match expected node %d", id3.Node(node), node.node)
+	}
+}
+
 // I feel like there's probably a better way
 func TestRace(t *testing.T) {
 
