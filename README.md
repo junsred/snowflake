@@ -30,7 +30,6 @@ Remember that there is a maximum of 22 bits available that can be shared between
 values. You do not have to use all 22 bits.
 
 ### Custom Epoch
-By default this package uses the Twitter Epoch of 1288834974657 or Nov 04 2010 01:42:54.
 You can set your own epoch value by passing a custom epoch time in milliseconds
 to `NewSnowflake(epoch)` or `NewSnowflakeWithBits(epoch, nodeBits, stepBits)`.
 
