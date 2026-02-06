@@ -135,17 +135,27 @@ func (s *Snowflake) NewNode(node ...int64) (*Node, error) {
 // - Make sure your system is keeping accurate system time
 // - Make sure you never have multiple nodes running with the same node ID
 func (n *Node) Generate() ID {
+	return n.generate(time.Now())
+}
+
+// Same with Generate but allows you to specify the current time.
+// - Make sure future nodes use different different node IDs or you may have collisions.
+func (n *Node) GenerateWithTime(t time.Time) ID {
+	return n.generate(t)
+}
+
+func (n *Node) generate(t time.Time) ID {
 	n.mu.Lock()
 	defer n.mu.Unlock()
 
-	now := time.Since(n.epoch).Milliseconds()
+	now := t.Sub(n.epoch).Milliseconds()
 
 	if now == n.time {
 		n.step = (n.step + 1) & n.stepMask
 
 		if n.step == 0 {
 			for now <= n.time {
-				now = time.Since(n.epoch).Milliseconds()
+				now = t.Sub(n.epoch).Milliseconds()
 			}
 		}
 	} else {
